@@ -1,0 +1,76 @@
+//Motor 1
+int enA = 7;
+int in1 = 5;
+int in2 = 6;
+
+//Motor 2
+int enB = 10;
+int in3 = 8;
+int in4 = 9;
+
+int timer = 0;
+int LeftSpeed = 256;
+int RightSpeed = 256;
+
+void setup() {
+  Serial.begin(9600);
+  
+  pinMode(enA, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(enB, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  analogWrite(enA, LeftSpeed);
+  analogWrite(enB, RightSpeed);
+}
+void loop() {  //Place actual directions here and replace my 4 blocks, they're just for testing
+
+    timer = 3000; // timer (in ms) states how long the action will last
+    Forward();    // calling on the void (below)
+    delay(1000);  // delays code for 1000ms before moving on
+    
+    timer = 3000;
+    Left();
+    delay(1000);
+    
+    timer = 3000;
+    Backward();
+    delay(1000);    
+
+    timer = 3000;
+    Right();
+    delay(1000);
+}
+
+/////////////////////////////////////////////////////////  The four basic directional movements
+void Forward(timer > 0) {   // Both wheels forward
+  timer--;
+  digitalWrite(in1, HIGH);  
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);  
+  digitalWrite(in4, LOW);
+}
+void Backward(timer > 0) {   //Both wheels backward
+  timer--;
+  digitalWrite(in1, LOW);  
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);  
+  digitalWrite(in4, HIGH);
+}
+void Right(timer > 0) {      //Left wheel(1) forward, right(2) backward
+  timer--;
+  digitalWrite(in1, HIGH);  
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);  
+  digitalWrite(in4, HIGH);
+}
+void Left(timer > 0) {      //Left wheel(1) backward, right(2) forward
+  timer--;
+  digitalWrite(in1, LOW);  
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH);  
+  digitalWrite(in4, LOW);
+}
