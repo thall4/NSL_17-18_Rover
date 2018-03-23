@@ -1,0 +1,41 @@
+
+int led_pin = 13; // Define the LED interface
+int Xswitch_pin = 4;// Definition of mercury tilt switch sensor interface
+int Yswitch_pin = 5;// Definition of mercury tilt switch sensor interface
+int Zswitch_pin = 6;// Definition of mercury tilt switch sensor interface
+int Xval, Yval, Zval; // Defines a numeric variable
+
+void setup()
+{
+  Serial.begin(115200);
+  
+  pinMode(led_pin, OUTPUT);
+  pinMode(Xswitch_pin, INPUT);
+  pinMode(Yswitch_pin, INPUT);
+  pinMode(Zswitch_pin, INPUT);
+}
+
+void loop()
+{
+  Xval = digitalRead(Xswitch_pin); 
+  Yval = digitalRead(Yswitch_pin); 
+  Zval = digitalRead(Zswitch_pin); 
+  
+  if(Xval == HIGH) {        // X axis   (high is mercury resting on pins)
+
+  else{
+
+  }
+  
+  if(Yval == HIGH) {        // Y axis
+
+  else{
+
+  }
+    
+  if(Zval == HIGH) {        // Z axis
+
+  else{
+
+  }
+}
