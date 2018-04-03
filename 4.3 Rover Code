@@ -1,0 +1,152 @@
+
+int MD_PWM1 = 6;        //Motor 1 Pins
+int MD_FWD1 = 4;
+int MD_BWD1 = 5;
+int MD_PWM2 = 10;       //Motor 2 Pins
+int MD_FWD2 = 8;
+int MD_BWD2 = 9;
+int wheelTimer = 0;     //Motor 1/2 Controls
+int LeftSpeed = 256;
+int RightSpeed = 256;
+int LegTrigger = 30;    //Relay Pins & Controls
+int SolarTrigger = 31;
+int WheelTrigger = 32;
+int eMatchTimer = 0;
+int MSwitchYaw = 54;    //Mercury Switch Pins & Controls
+int MSwitchPitch = 55;
+int MSwitchRoll = 56;
+int YawVal, PitchVal, RollVal;
+
+//All the voids
+void Activated();
+void Left();
+void Right();
+void Forward();
+void Backward();
+void LegDeploy();
+void SolarDeploy();
+void WheelDeploy();
+boolean YawSense();
+boolean PitchSense();
+boolean RollSense();
+
+void setup() {
+  Serial.begin(9600);
+  
+  pinMode(MD_PWM1, OUTPUT);
+  pinMode(MD_FWD1, OUTPUT);
+  pinMode(MD_BWD1, OUTPUT);
+  pinMode(MD_PWM2, OUTPUT);
+  pinMode(MD_FWD2, OUTPUT);
+  pinMode(MD_BWD2, OUTPUT);
+  
+  pinMode(MSwitchYaw, INPUT);
+  pinMode(MSwitchPitch, INPUT);
+  pinMode(MSwitchRoll, INPUT);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  analogWrite(MD_PWM1, 256);
+  analogWrite(MD_PWM2, 256); 
+  
+  digitalWrite(SolarTrigger, HIGH); //High is off for relays
+  digitalWrite(LegTrigger, HIGH);
+  digitalWrite(WheelTrigger, HIGH);
+  
+}
+void loop() { 
+  Activated();
+}
+////////////////////////////////////////////////////////////////////
+void Activated() {
+  //initial trigger
+  eMatchTimer = 1*1000;    //Activates ematch in a void (1 sec of power)
+  WheelDeploy();          
+  delay(3*1000);          //3 sec pause
+  
+  while //(tilted == true)  {
+  Forward();}              //Rotates the body until its upright
+  return
+  
+  eMatchTimer = 1*1000;    //Deploys leg (1 sec of power)
+  LegDeploy();
+  delay(2*1000);          //2 sec pause
+  
+  wheelTimer = 5*1000;    //Rover goes forward for __<-__ ms NEEDS TO BE TESTED
+  Forward();
+  
+  eMatchTimer = 1*1000;    //Deploys solar panel (1 sec of power)
+  SolarDeploy();
+}
+////////////////////////////////////////////////////////////////////
+void Forward() {   // Both wheels forward
+  digitalWrite(MD_FWD1, HIGH);  
+  digitalWrite(MD_BWD1, LOW);
+  digitalWrite(MD_FWD2, HIGH);  
+  digitalWrite(MD_BWD2, LOW);
+  delay(wheelTimer);
+  return();
+}
+void Backward() {   //Both wheels backward
+  digitalWrite(MD_FWD1, LOW);  
+  digitalWrite(MD_BWD1, HIGH);
+  digitalWrite(MD_FWD2, LOW);  
+  digitalWrite(MD_BWD2, HIGH);
+  delay(wheelTimer);
+  return;
+}
+void Right() {      //Left wheel(1) forward, right(2) backward
+  digitalWrite(MD_FWD1, HIGH);  
+  digitalWrite(MD_BWD1, LOW);
+  digitalWrite(MD_FWD2, LOW);  
+  digitalWrite(MD_BWD2, HIGH);
+  delay(wheelTimer);
+  return();
+}
+void Left() {      //Left wheel(1) backward, right(2) forward
+  digitalWrite(MD_FWD1, LOW);  
+  digitalWrite(MD_BWD1, HIGH);
+  digitalWrite(MD_FWD2, HIGH);  
+  digitalWrite(MD_BWD2, LOW);
+  delay(wheelTimer);
+  return();
+}
+////////////////////////////////////////////////////////////////////
+boolean YawSense() {
+  YawVal = digitalRead(MSwitchYaw);
+  if (YawVal == HIGH)
+  return true;  //Circuit is complete
+  else
+  return false;
+}
+boolean PitchSense() {
+  PitchVal = digitalRead(MSwitchPitch);
+  if (PitchVal == HIGH)
+  return true;
+  else
+  return false;
+}
+
+boolean RollSense() {
+  RollVal = digitalRead(MSwitchRoll);
+  if (RollVal == HIGH)
+  return true; 
+  else
+  return false;
+}
+////////////////////////////////////////////////////////////////////
+void SolarDeploy() {
+  digitalWrite(SolarTrigger, LOW);  
+  delay(eMatchTimer);
+  digitalWrite(SolarTrigger, HIGH);
+}
+void LegDeploy() {
+  digitalWrite(LegTrigger, LOW);  
+  delay(eMatchTimer);
+  digitalWrite(LegTrigger, HIGH);
+}
+void WheelDeploy() {
+  digitalWrite(WheelTrigger, LOW);  
+  delay(eMatchTimer);
+  digitalWrite(WheelTrigger, HIGH);
+}
